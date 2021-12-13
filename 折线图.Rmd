@@ -1,0 +1,66 @@
+---
+title: "final project graphs"
+author: "Siyuan Sang"
+date: "2021/12/11"
+output: html_document
+---
+
+```{r}
+#read in the dataset
+index<-read.csv('clean_overall dataset_adjusted.csv',header = TRUE)
+#set date to date format
+index$Date<-as.Date(index$Date)
+```
+
+
+
+```{r}
+#indicate the maximum and minimum of each index
+max_px<-max(index$PX_LAST)
+max_na<-max(index$Nasdaq)
+max_sg<-max(index$SG_CTA)
+max_do<-max(index$Dow_Jones)
+max_sp<-max(index$S.P500)
+min_px<-min(index$PX_LAST)
+min_na<-min(index$Nasdaq)
+min_sg<-min(index$SG_CTA)
+min_do<-min(index$Dow_Jones)
+min_sp<-min(index$S.P500)
+#divide all the numbers by the maximum of their index
+index$PX_LAST_ad<-(index$PX_LAST-min_px)/(max_px-min_px)
+index$Nasdaq_ad<-(index$Nasdaq-min_na)/(max_na-min_na)
+index$SG_CTA_ad<-(index$SG_CTA-min_sg)/(max_sg-min_sg)
+index$Dow_Jones_ad<-(index$Dow_Jones-min_do)/(max_do-min_do)
+index$S.P500_ad<-(index$S.P500-min_sp)/(max_sp-min_sp)
+```
+
+```{r}
+#show the tendency of change one by one
+plot(index$Date,index$PX_LAST,type='l',xlab='Day',ylab='Bloomberg',col='red')
+plot(index$Date,index$Nasdaq,type='l',xlab='Day',ylab='Nasdaq',col='blue')
+plot(index$Date,index$SG_CTA,type='l',xlab='Day',ylab='SG CTA',col='green')
+plot(index$Date,index$Dow_Jones,type='l',xlab='Day',ylab='Dow Jones',col='orange')
+plot(index$Date,index$S.P500,type='l',xlab='Day',ylab='S.P500',col='brown')
+```
+
+
+```{r}
+#show the time series of each index by plot
+library(ggplot2)
+ggplot(index, aes(Date)) + 
+  geom_line(aes(y=PX_LAST_ad, colour = "Bloomberg")) + 
+  geom_line(aes(y =Nasdaq_ad, colour = "Nasdaq")) +
+  geom_line(aes(y =SG_CTA_ad, colour = "SG CTA"))+
+  geom_line(aes(y =Dow_Jones_ad, colour = "Dow Jones"))+
+  geom_line(aes(y =S.P500_ad, colour = "S.P500"))+
+  ylab('Index')
+```
+
+
+
+
+
+
+
+
+
